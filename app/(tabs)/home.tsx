@@ -8,21 +8,12 @@ import {
   Image,
 } from "react-native";
 import { auth, storage } from "../../FirebaseConfig";
-import { router } from "expo-router";
 import { getAuth } from "firebase/auth";
 import { getDownloadURL, listAll, ref } from "firebase/storage";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function HomeScreen() {
   const [images, setImages] = useState<string[]>([]);
-
-  // Ensure user is authenticated
-  useEffect(() => {
-    getAuth().onAuthStateChanged((user) => {
-      if (!user) router.replace("/");
-      else fetchImages(user.uid);
-    });
-  }, []);
 
   const fetchImages = async (userId: string) => {
     try {
@@ -48,7 +39,7 @@ export default function HomeScreen() {
       <View>
         <TouchableOpacity
           style={styles.signOutButton}
-          onPress={() => auth.signOut()}
+          onPress={() => {auth.signOut()}}
         >
           <Text style={styles.signOutText}>Sign Out</Text>
         </TouchableOpacity>

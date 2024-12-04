@@ -12,22 +12,12 @@ import {
 } from "react-native";
 import { storage, auth } from "../../FirebaseConfig";
 import { getDownloadURL, ref, listAll, deleteObject } from "firebase/storage";
-import { User, onAuthStateChanged } from "firebase/auth";
+import { User } from "firebase/auth";
 
 export default function TabTwoScreen() {
   const [images, setImages] = useState<any[]>([]);
   const [user, setUser] = useState<User | null>(null);
   const [refreshing, setRefreshing] = useState(false);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      if (currentUser) {
-        fetchImages(currentUser.uid);
-      }
-    });
-    return unsubscribe;
-  }, []);
 
   const fetchImages = async (userId: any) => {
     try {

@@ -5,6 +5,8 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
+import { getAuth } from "firebase/auth";
+import { router } from "expo-router";
 
 import { useColorScheme } from '@/components/useColorScheme';
 
@@ -48,12 +50,40 @@ export default function RootLayout() {
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
+  useEffect(() => {
+    const unsubscribe = getAuth().onAuthStateChanged((user) => {
+      if (user) {
+        router.replace('/home');
+        return;
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <Stack>
+        {/* Login Screen */}
         <Stack.Screen name="index" options={{ headerShown: false }} />
+        
+        {/* Sign-Up Screen */}
+        <Stack.Screen
+          name="sign-up"
+          options={{
+            headerShown: false,
+            title: "Sign Up",
+            headerStyle: { backgroundColor: "#000" },
+            headerTintColor: "#B7E561",
+          }}
+        />
+
+        {/* Tab Screens */}
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+        
+        {/* Modal Screen */}
+        <Stack.Screen name="modal" options={{ presentation: "modal" }} />
       </Stack>
     </ThemeProvider>
   );

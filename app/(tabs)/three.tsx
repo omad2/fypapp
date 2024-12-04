@@ -20,7 +20,7 @@ import {
   deleteObject,
 } from "firebase/storage";
 import * as ImagePicker from "expo-image-picker";
-import { User, onAuthStateChanged } from "firebase/auth";
+import { User } from "firebase/auth";
 
 export default function TabThreeScreen() {
   const [image, setImage] = useState<any>(null);
@@ -40,16 +40,6 @@ export default function TabThreeScreen() {
   });
 
   const categories = ["Graffiti", "Potholes", "Litter", "Broken Infrastructure"];
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      if (currentUser) {
-        fetchImages(currentUser.uid);
-      }
-    });
-    return unsubscribe;
-  }, []);
 
   const fetchImages = async (userId: any) => {
     try {
